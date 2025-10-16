@@ -43,7 +43,7 @@ class ProfileController extends Controller
             'timestamp' => $timestamp,
         ];
 
-        //? return response json
+        //? return success response
         return response()->json($payLoad, 200, [
             'Content-Type' => 'application/json'
         ]);

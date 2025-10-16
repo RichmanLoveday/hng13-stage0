@@ -18,7 +18,13 @@ class CartFactService
     }
 
 
-    public function fetchFact(): string|array|object
+    /*     
+      * Fetch a random cat fact from the external API
+     *
+     * @return array|string
+     */
+
+    public function fetchFact(): array|object
     {
         try {
             //? access cartfact api to get a fact
