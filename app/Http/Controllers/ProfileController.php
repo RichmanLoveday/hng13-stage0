@@ -18,7 +18,15 @@ class ProfileController extends Controller
     public function me()
     {
         //? Fetch Cat (Service return fallback string if an error occurs)
-        $fact = $this->cartFactService->fetchFact();
+        $catFactResponse = $this->cartFactService->fetchFact();
+
+        // dd($catFactResponse);
+        if ($catFactResponse->status === 'error') {
+            return response()->json([
+                'status' => 'error',
+                'message' => $catFactResponse->message ?? 'Could not fetch fact at the moment',
+            ], $catFactResponse->code);
+        }
 
         //? time stamp in current UTC IsO 8601 format
         $timestamp = now()->utc()->toIso8601String();
@@ -31,10 +39,9 @@ class ProfileController extends Controller
                 'name' => 'Richman Loveday',
                 'stack' => 'Laravel 11',
             ],
-            'fact' => $fact,
+            'fact' => $catFactResponse->fact,
             'timestamp' => $timestamp,
         ];
-
 
         //? return response json
         return response()->json($payLoad, 200, [

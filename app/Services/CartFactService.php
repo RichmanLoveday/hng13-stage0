@@ -18,7 +18,7 @@ class CartFactService
     }
 
 
-    public function fetchFact()
+    public function fetchFact(): string|array|object
     {
         try {
             //? access cartfact api to get a fact
@@ -28,23 +28,39 @@ class CartFactService
 
             //? check if response if successfull and fact is present
             if ($response->successful() && isset($response['fact'])) {
-                return $response['fact'];       //? return the fact if successfull or return string error message
+                //? return the fact if successfull or return string error message
+                return (object) [
+                    'status' => 'success',
+                    'fact' => $response['fact'],
+                    'code' => $response->status(),
+                ];
             }
 
-            //? log error warning message
+            //? log error warning message if no successful response
             Log::warning("CartFactService: could not fetch fact", [
-                'status' => $response->status(),
+                'status' => 'error',
                 'response' => $response->body(),
             ]);
 
-            return "Could not fecth fact at the moment";
+
+            //? return error object
+            return (object) [
+                'status' => 'error',
+                'message' => "Could not fecth fact at the moment",
+                'code' => $response->status(),
+            ];
         } catch (\Exception $e) {
+            //? log error message for debugging
             Log::error("CartFactService: error fetching fact", [
-                'status' => $e->getCode(),
+                'code' => $e->getCode(),
                 'error' => $e->getMessage(),
             ]);
 
-            return "Could not fecth fact at the moment";
+            return (object) [
+                'status' => 'error',
+                'message' => "An error occurred while fetching fact",
+                'code' => 503,
+            ];
         }
     }
 }
