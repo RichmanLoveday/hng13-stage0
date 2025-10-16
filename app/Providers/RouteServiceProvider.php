@@ -23,8 +23,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        //? Handle api limits 
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(10)->by($request->user()?->id ?: $request->ip())->response(function () {
+            return Limit::perMinute(5)->by($request->user()?->id ?: $request->ip())->response(function () {
                 return response()->json([
                     "status" => "error",
                     'message' => "Too many requests, please slow down and try again later.",

@@ -37,7 +37,7 @@ class ProfileController extends Controller
             'user' => [
                 'email' => 'lovedayrichman@yahoo.com',
                 'name' => 'Richman Loveday',
-                'stack' => 'Laravel 11',
+                'stack' => 'Laravel 11 / PHP',
             ],
             'fact' => $catFactResponse->fact,
             'timestamp' => $timestamp,
