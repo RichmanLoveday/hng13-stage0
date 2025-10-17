@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -27,9 +28,12 @@ class CartFactService
     public function fetchFact(): array|object
     {
         try {
+            //? Disable cache for this request
+            Cache::flush();
+
             //? access cartfact api to get a fact
             $response = Http::timeout($this->timeout)
-                ->get($this->baseUrl);
+                ->get("{$this->baseUrl}?t=" . time());
 
 
             //? check if response if successfull and fact is present
